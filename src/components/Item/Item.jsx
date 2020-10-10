@@ -9,7 +9,7 @@ const Item = (props) => {
           style={{"width": "100px"}}
        />
         {props.name}
-        <span className="badge badge-primary badge-pill">Precio: {props.price}</span>
+        <span className="badge badge-primary badge-pill">Precio $ {props.price}</span>
     </Link>
   );
 }

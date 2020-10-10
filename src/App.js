@@ -7,6 +7,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import {getFirestore} from './firebase/firebase';
 
 //Components
 import ItemList from './components/ItemList/ItemList';
@@ -41,9 +42,13 @@ class App extends React.Component{
                 <Route path="/cart">
                   <Cart></Cart>
                 </Route>
-                <Route path="/">
+                <Route path="/category/:categoryId">
                   <Home nombre="Juancito" />
-                  <ItemList items={this.state.itemsDisponibles} />
+                  <ItemList />
+                </Route>
+                <Route exact path="/">
+                  <Home nombre="Juancito" />
+                  <ItemList />
                 </Route>
               </Switch>
             </div>
@@ -54,14 +59,36 @@ class App extends React.Component{
   };
 
   componentDidMount() {
-    fetch('https://api.mercadolibre.com/sites/MLA/search?q=celular')
+
+    // const db=getFirestore();
+    // const itemCollection = db.collection("items");
+
+    // itemCollection.get()
+    //   .then((querySnapshot) => {
+    //       if (0===querySnapshot.size) {
+    //           console.log("No results");
+    //       }
+    //       else {
+    //           let res=[];
+    //           res=querySnapshot.docs.map((doc)=>{ return {id:doc.id, data: doc.data()} });
+    //           this.setState({itemsDisponibles:res})
+    //       }
+    //   })
+    //   .catch((error)=>{
+    //       console.log("An error occurred fetching items.",error);
+    //   })
+    //   .finally(()=>{
+    //   });
+
+
+    /*fetch('https://api.mercadolibre.com/sites/MLA/search?q=celular')
     .then(response => {
       return response.json();
     })
     .then(res => {
       this.setState({itemsDisponibles:res.results})
       this.setState({itemSeleccionado:res.results[0]})
-    });
+    });*/
   }
 }
 

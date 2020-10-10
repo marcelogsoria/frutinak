@@ -1,6 +1,7 @@
 import React, {useState,useEffect} from 'react';
 import ItemDetail from '../ItemDetail/ItemDetail'
 import { useParams } from 'react-router-dom';
+import {getFirestore} from '../../firebase/firebase'
 
 const ItemDetailContainer = (props) => {
     let {itemId} = useParams();
@@ -9,16 +10,24 @@ const ItemDetailContainer = (props) => {
   
     useEffect(() => {
       setLoading(true);
-//      console.log("pidiendo a ML.. con itemID "+itemId);
-      fetch('https://api.mercadolibre.com/items?ids='+itemId)
-      .then(response => {
-        return response.json();
+
+   
+      const db=getFirestore();
+      const item = db.collection('items').doc(itemId);
+
+      item.get()
+      .then((querySnapshot) => {
+          let res=null;
+          res=querySnapshot.data();
+          setData(res);
       })
-      .then(res => {
-//        console.log("recibido de ML..");
-        setData(res[0].body);
+      .catch((error)=>{
+          console.log("An error occurred fetching items.",error);
+      })
+      .finally(()=>{
         setLoading(false);
-      })
+      });
+
     }, [itemId]);
   
     if(loading) {

@@ -1,37 +1,61 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import Item from '../Item/Item'
-import {getFirestore} from '../../firebase';
+import { useParams } from 'react-router-dom';
+import {getFirestore} from '../../firebase/firebase'
+import { useState,useEffect } from 'react';
 
 const ItemList = (props) => {
-
-    useEffect(()=>{
+    const {categoryId}=useParams();
+    const [items,setItems]=useState([]);
+    const [loading, setLoading] = useState(true);
     
-    const db=getFirestore();
-    const itemCollection = db.collection("items");
+    useEffect(() => {
+        setLoading(true);
+        const db=getFirestore();
+        let itemCollection = null;
 
-    itemCollection.get().then((querySnapshot) => {
-        if (0===querySnapshot.size) {
-            console.log("No results");
+        if (categoryId) {
+            const categoryDocRef = db.collection('categories')
+                .doc(categoryId);
+
+            itemCollection = db.collection('items')
+                .where('categoryId', '==', categoryDocRef);
+
         }
         else {
-            console.log(querySnapshot.docs.map(doc=>doc.data()));
+            itemCollection=db.collection("items");
         }
-    }).catch((error)=>{
-        console.log("An error occurred fetching items.",error);
-    }).finally(()=>{
-  
-    });
-    },[]);
     
-    if (!props.items || 0===props.items.length) {
+        itemCollection.get()
+          .then((querySnapshot) => {
+              if (0===querySnapshot.size) {
+                  console.log("No results");
+              }
+              else {
+                  let res=[];
+                  res=querySnapshot.docs.map((doc)=>{ return {id:doc.id, data: doc.data()} });
+                  setItems(res);
+              }
+          })
+          .catch((error)=>{
+              console.log("An error occurred fetching items.",error);
+          })
+          .finally(()=>{
+            setLoading(false);
+          });
+    
+    
+      }, [categoryId]);
+
+    if (loading) {
         return "Cargando  items..."
     }
     else {
         return (
             <div className="list-group">
-                {props.items.map
+                {items.map
                     (
-                        i => <Item id={i.id} key={i.id} name={i.title} price={i.price} image={i.thumbnail}/>
+                        i => <Item id={i.id} key={i.id} name={i.data.title} price={i.data.price} image={i.data.image}/>
                             
                     )
                 }

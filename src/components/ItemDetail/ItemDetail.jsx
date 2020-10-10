@@ -20,13 +20,12 @@ const ItemDetail = (props) => {
         }}>
         <div>
             <h4>{props.item.title}</h4>
-            <h3>id:{props.item.id}</h3>
             <img
             alt="Item"
-            src={props.item.thumbnail} 
-            style={{"width": "100px"}}
+            src={props.item.image} 
+            style={{"width": "300px"}}
                 />
-            <p>$ {props.item.price}</p>
+            <h2>$ {props.item.price}</h2>
             <ItemCount initial="1" min="1" max="50" onChange={setCantidadAComprar}/>
             <div className="input-group mb-3 justify-content-md-center">
             <button className="btn btn-dark btn-sm" id="plus-btn" onClick={()=>addToCart(props.item,cantidadAComprar)}><span>Comprar {cantidadAComprar>1?cantidadAComprar:''}</span></button>

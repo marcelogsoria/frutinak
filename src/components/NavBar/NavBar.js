@@ -34,7 +34,7 @@ const NavBar = (props) => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
-            <UncontrolledDropdown nav inNavbar>
+{/*            <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
                 Barritas de Cereales
               </DropdownToggle>
@@ -80,9 +80,15 @@ const NavBar = (props) => {
                   Work
                 </DropdownItem>
               </DropdownMenu>
-            </UncontrolledDropdown>
+            </UncontrolledDropdown> */}
             <NavItem>
-              <ReactStrapNavLink><NavLink to="/">Home</NavLink></ReactStrapNavLink>
+              <ReactStrapNavLink><NavLink to="/" style={{ color: 'inherit', textDecoration: 'inherit'}}>Home</NavLink></ReactStrapNavLink>
+            </NavItem>
+            <NavItem>
+              <ReactStrapNavLink><NavLink to="/category/lUKkHc2ZIFoULSQvURia" style={{ color: 'inherit', textDecoration: 'inherit'}}>Productos Elaborados</NavLink></ReactStrapNavLink>
+            </NavItem>
+            <NavItem>
+              <ReactStrapNavLink><NavLink to="/category/nySu8vNeKHEcJacjmSJy" style={{ color: 'inherit', textDecoration: 'inherit'}}>Frutos secos y deshidratados</NavLink></ReactStrapNavLink>
             </NavItem>
           </Nav>
           <ReactStrapNavLink>
