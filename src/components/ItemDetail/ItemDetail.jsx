@@ -19,13 +19,13 @@ const ItemDetail = (props) => {
             "alignItems": "center"
         }}>
         <div>
-            <h4>{props.item.title}</h4>
+            <h4>{props.item.data.title}</h4>
             <img
             alt="Item"
-            src={props.item.image} 
+            src={props.item.data.image} 
             style={{"width": "300px"}}
                 />
-            <h2>$ {props.item.price}</h2>
+            <h2>$ {props.item.data.price}</h2>
             <ItemCount initial="1" min="1" max="50" onChange={setCantidadAComprar}/>
             <div className="input-group mb-3 justify-content-md-center">
             <button className="btn btn-dark btn-sm" id="plus-btn" onClick={()=>addToCart(props.item,cantidadAComprar)}><span>Comprar {cantidadAComprar>1?cantidadAComprar:''}</span></button>

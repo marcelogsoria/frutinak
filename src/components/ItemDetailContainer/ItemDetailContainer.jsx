@@ -18,7 +18,9 @@ const ItemDetailContainer = (props) => {
       item.get()
       .then((querySnapshot) => {
           let res=null;
-          res=querySnapshot.data();
+          res={id:itemId,
+              data:querySnapshot.data(),
+          };
           setData(res);
       })
       .catch((error)=>{
