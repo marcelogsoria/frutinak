@@ -15,6 +15,9 @@ const Cart = (props) => {
             , 0
         )
     }
+    const finishBuy= () => {
+        alert("hola");
+    }
     if (0<cart.length) {
         return (
             <div className="list-group">
@@ -25,6 +28,9 @@ const Cart = (props) => {
                     )
                 }
                 <span>Artículos a comprar: {cart.length} Total a pagar $: {totalCart(cart)}</span>
+                <div>
+                    <button className="btn btn-dark btn-sm" onClick={finishBuy}><span className="material-icons">done_outline</span>Finalizar Compra</button>
+                </div>
             </div>
         );
     }
