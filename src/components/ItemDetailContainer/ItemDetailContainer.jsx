@@ -3,11 +3,24 @@ import ItemDetail from '../ItemDetail/ItemDetail'
 import { useParams } from 'react-router-dom';
 import {getFirestore} from '../../firebase/firebase'
 
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
+    },
+  }));
+
 const ItemDetailContainer = (props) => {
     let {itemId} = useParams();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
   
+    const classes = useStyles();
+
     useEffect(() => {
       setLoading(true);
 
@@ -33,7 +46,11 @@ const ItemDetailContainer = (props) => {
     }, [itemId]);
   
     if(loading) {
-      return <div>Cargando Item...</div>
+      return (
+        <Backdrop className={classes.backdrop} open={loading} /*onClick={handleClose}*/>
+            <CircularProgress color="inherit" />
+        </Backdrop>
+      );
     }
     else {
       //console.log(data)

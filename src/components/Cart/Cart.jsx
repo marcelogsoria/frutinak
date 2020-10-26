@@ -12,20 +12,37 @@ import ClientDataDialog from '../ClientDataDialog/ClientDataDialog';
 import { Snackbar } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 
+import Grid from '@material-ui/core/Grid';
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
+import { makeStyles } from '@material-ui/core/styles';
+
+import Paper from '@material-ui/core/Paper';
+
+const useStyles = makeStyles({
+    table: {
+      minWidth: 350,
+    },
+  });
+
 const Cart = (props) => {
     const [cart,setCart]=useContext(CartContext);
     const [guardandoCompra, setGuardandoCompra]=useState(true);
     const [openBuyDialog, setOpenBuyDialog]=useState(false);
     const [openClientDataDialog, setOpenClientDataDialog]=useState(false);
-    const [openSnackBar, setOpenSnackBar]=useState(false);
-    const [mensajeSnackBar, setMensajeSnackBar]=useState(false);
-    const [severitySnackBar, setSeveritySnackBar]=useState(false);
     const [orderId, setOrderId] = useState(null);
     const [clientName, setClientName] = useState(null);
     const [clientEmail, setclientEmail] = useState(null);
     const [clientPhone, setclientPhone] = useState(null);
     const { enqueueSnackbar } = useSnackbar();
-
+    
+    const classes = useStyles();
 
     const finishBuy = () => {
 
@@ -119,16 +136,38 @@ const Cart = (props) => {
                     <span>Teléfono: {clientPhone}</span><br />
                     <span>Email: {clientEmail}</span><br />
                 </p>
-                <p>
+                <Table className={classes.table} aria-label="simple table">
+                    <TableHead>
+                    <TableRow>
+                        <TableCell align="right">Cantidad</TableCell>
+                        <TableCell>Descripción</TableCell>
+                        <TableCell align="right">Precio&nbsp;($)</TableCell>
+                    </TableRow>
+                    </TableHead>
+                    <TableBody>
                     {cart.map( (item) => {
                         return <>
-                            <span>
-                            {item.cantidad}x
-                            {item.item.data.title} $
-                            {item.item.data.price} 
-                            </span><br />
-                            </>;
+                        <TableRow key={item.id}>
+                            <TableCell align="right">{item.cantidad}</TableCell>
+                            <TableCell>{item.item.data.title}</TableCell>
+                            <TableCell align="right">{item.item.data.price}</TableCell>
+                        </TableRow>
+                        </>
                     })}
+                    {/* {rows.map((row) => (
+                        <TableRow key={row.name}>
+                        <TableCell component="th" scope="row">
+                            {row.name}
+                        </TableCell>
+                        <TableCell align="right">{row.calories}</TableCell>
+                        <TableCell align="right">{row.fat}</TableCell>
+                        <TableCell align="right">{row.carbs}</TableCell>
+                        <TableCell align="right">{row.protein}</TableCell>
+                        </TableRow>
+                    ))} */}
+                    </TableBody>
+                </Table>
+                <p>
                 </p>
                 <p>
                     Total $ {totalCart(cart)}
@@ -161,9 +200,14 @@ const Cart = (props) => {
     }
     else {
         return (<div>
-                ¡El carrito está vacío!.
-                <br />
-                <NavLink to="/">Home</NavLink>
+                  <Grid container spacing={10}>
+                    <Grid item xs={12}>
+                        <h1></h1>
+                    </Grid>
+                    <Grid item xs={12}>
+                    <span className="material-icons">shopping_cart</span> ¡El carrito está vacío!.
+                    </Grid>
+                </Grid>
             </div>
         );
     }
@@ -171,3 +215,5 @@ const Cart = (props) => {
 
 
 export default Cart;
+
+
