@@ -20,6 +20,9 @@ import Home from './pages/Home/Home'
 //Contexts
 import { CartProvider } from './context/cartContext';
 
+import { SnackbarProvider } from 'notistack';
+
+
 class App extends React.Component{
   constructor(props) {
     super(props);
@@ -30,31 +33,35 @@ class App extends React.Component{
   }
   render() {
     return(
-      <CartProvider>
-        <div className="App">
-          <Router>
-            <NavBar /> 
-            <div>
-              <Switch>
-                <Route path="/item/:itemId" >
-                  <ItemDetailContainer />
-                </Route>
-                <Route path="/cart">
-                  <Cart></Cart>
-                </Route>
-                <Route path="/category/:categoryId">
-                  <Home nombre="Juancito" />
-                  <ItemList />
-                </Route>
-                <Route exact path="/">
-                  <Home nombre="Juancito" />
-                  <ItemList />
-                </Route>
-              </Switch>
-            </div>
-          </Router>
-        </div>
-      </CartProvider>
+      <SnackbarProvider maxSnack={3}>
+        <CartProvider>
+          <div className="App">
+            <Router>
+              <NavBar /> 
+              <div>
+                <Switch>
+                  <Route path="/item/:itemId" >
+                    <ItemDetailContainer />
+                  </Route>
+                  <Route path="/cart">
+                    <Cart></Cart>
+                  </Route>
+                  <Route path="/category/:categoryId">
+                    <Home>
+                      <ItemList />
+                    </Home>
+                  </Route>
+                  <Route exact path="/">
+                    <Home>
+                      <ItemList />
+                    </Home>
+                  </Route>
+                </Switch>
+              </div>
+            </Router>
+          </div>
+        </CartProvider>
+      </SnackbarProvider>
     );
   };
 

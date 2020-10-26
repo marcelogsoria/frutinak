@@ -5,57 +5,87 @@ import {
     NavLink
   } from "react-router-dom";
 import ModalDialog from '../ModalDialog/ModalDialog';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {getFirestore,getFirebase} from '../../firebase/firebase'
+import ClientDataDialog from '../ClientDataDialog/ClientDataDialog';
+import { Snackbar } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
 
 const Cart = (props) => {
     const [cart,setCart]=useContext(CartContext);
     const [guardandoCompra, setGuardandoCompra]=useState(true);
-    const [openDialog, setOpenDialog]=useState(false);
+    const [openBuyDialog, setOpenBuyDialog]=useState(false);
+    const [openClientDataDialog, setOpenClientDataDialog]=useState(false);
+    const [openSnackBar, setOpenSnackBar]=useState(false);
+    const [mensajeSnackBar, setMensajeSnackBar]=useState(false);
+    const [severitySnackBar, setSeveritySnackBar]=useState(false);
     const [orderId, setOrderId] = useState(null);
+    const [clientName, setClientName] = useState(null);
+    const [clientEmail, setclientEmail] = useState(null);
+    const [clientPhone, setclientPhone] = useState(null);
+    const { enqueueSnackbar } = useSnackbar();
+
 
     const finishBuy = () => {
-        setOpenDialog(true);
-        setGuardandoCompra(true);
 
-        const db=getFirestore();
-        const orders=db.collection("orders");
-        const fb=getFirebase();
-        let orderItems=[];
-        orderItems=cart.map( (item) => {
-            return {
-                id:item.item.id,
-                price: item.item.data.price,
-                quantity: item.cantidad,
-                title: item.item.data.title,
+        setOpenClientDataDialog(true);
+    };
+    
+    const handleCloseBuyDialog = () => {
+        setOpenBuyDialog(false);
+    };
+
+    const handleCloseClientDataDialog = ({result,name,email,phone}) => {
+        setOpenClientDataDialog(false);
+        
+
+        if (result) {
+            setClientName(name);
+            setclientEmail(email);
+            setclientPhone(phone);
+
+            setOpenBuyDialog(true);
+            setGuardandoCompra(true);
+
+            const db=getFirestore();
+            const orders=db.collection("orders");
+            const fb=getFirebase();
+            let orderItems=[];
+            orderItems=cart.map( (item) => {
+                return {
+                    id:item.item.id,
+                    price: item.item.data.price,
+                    quantity: item.cantidad,
+                    title: item.item.data.title,
+                };
+            });
+            const newOrder= {
+                buyer:{phone:phone,
+                        name:name,
+                        email:email
+                    },
+                items:orderItems,
+                // date:fb.firestore.Timestamp.fromDate(new Date()),
+                total:totalCart(cart),
             };
-        });
-        const newOrder= {
-            buyer:{phone:"011 3542251",
-                   name:"Marcelo Soria",
-                   email:"msoria@ciensis.com"},
-            items:orderItems,
-            // date:fb.firestore.Timestamp.fromDate(new Date()),
-            total:totalCart(cart),
+
+            orders.add(newOrder).then( ({id}) => {
+                setOrderId(id);            
+            }).catch(err => {
+                console.log(err);
+            }).finally( () => {
+                setTimeout(function(){
+                    setGuardandoCompra(false);
+                }, 2000);//wait 2 seconds
+            });
+        }
+        else {
+            enqueueSnackbar('No se pudo completar la compra!', { variant: 'error' });
+        }
         };
 
-        orders.add(newOrder).then( ({id}) => {
-            setOrderId(id);            
-        }).catch(err => {
-            console.log(err);
-        }).finally( () => {
-            setTimeout(function(){
-                setGuardandoCompra(false);
-            }, 2000);//wait 2 seconds
-        });
-
-      };
-    
-      const handleCloseDialog = () => {
-        setOpenDialog(false);
-      };
-
-    const totalCart = (cartToSum)=> {
+        const totalCart = (cartToSum)=> {
         return cartToSum.reduce(
             (valorAnterior,elementoActual) => {
                 return valorAnterior+ elementoActual.cantidad *  parseFloat(elementoActual.item.data.price);
@@ -83,6 +113,11 @@ const Cart = (props) => {
                 </p>
                 <p>
                     Nro de compra: {orderId}
+                </p>
+                <p>
+                    <span>Nombre: {clientName}</span><br />
+                    <span>Teléfono: {clientPhone}</span><br />
+                    <span>Email: {clientEmail}</span><br />
                 </p>
                 <p>
                     {cart.map( (item) => {
@@ -114,7 +149,10 @@ const Cart = (props) => {
                 <span>Artículos a comprar: {cart.length} Total a pagar $: {totalCart(cart)}</span>
                 <div>
                     <button className="btn btn-dark btn-sm" onClick={finishBuy}><span className="material-icons">done_outline</span>Finalizar Compra</button>
-                    <ModalDialog open={openDialog} handleClose={handleCloseDialog} >
+                    <ClientDataDialog open={openClientDataDialog} 
+                        handleClose={handleCloseClientDataDialog} 
+                    />
+                    <ModalDialog open={openBuyDialog} handleClose={handleCloseBuyDialog} >
                         {contenidoModal()}
                     </ModalDialog>
                 </div>

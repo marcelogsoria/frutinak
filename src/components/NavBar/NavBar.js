@@ -27,6 +27,15 @@ const NavBar = (props) => {
 
   const toggle = () => setIsOpen(!isOpen);
 
+  const totalCart = (cartToSum)=> {
+    return cartToSum.reduce(
+        (valorAnterior,elementoActual) => {
+            return valorAnterior + elementoActual.cantidad;
+        }
+        , 0
+    );
+  }
+
   return (
     <div>
       <Navbar color="light" light expand="md">
@@ -93,7 +102,7 @@ const NavBar = (props) => {
           </Nav>
           <ReactStrapNavLink>
             <NavLink to="/cart">
-              <CartIcon/>({cart.length})
+              <CartIcon/>({totalCart(cart)})
             </NavLink>
           </ReactStrapNavLink>
           <NavbarText>Tu pausa saludable</NavbarText>

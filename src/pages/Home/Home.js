@@ -6,9 +6,6 @@ const Home = (props) => {
   
   return (
     <div className="container">
-        <p>
-        Hola {props.nombre} !
-        </p>
         {props.children}
     </div>
 
