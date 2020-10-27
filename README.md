@@ -9,6 +9,8 @@ This is the portal in beta version for the food company Frutinak, it was develop
 ## Applied Tecnologies
 
 - HTML5 and CSS3: Semantic Elements, CSS Grid, Flexbox
+- UI Components: Material UI, Material Icons
+- App messages: Notistack (Snackbar provider)
 - React: Components, Props, Events, Hooks, Router, Axios
 - DataBase Cloud Service: Firebase, Cloud Firestore
 - Development: Git, Github,
