@@ -36,7 +36,7 @@ class App extends React.Component{
       <SnackbarProvider maxSnack={3}>
         <CartProvider>
           <div className="App">
-            <Router>
+            <Router basename={'/frutinak'}>
               <NavBar /> 
               <div>
                 <Switch>
